@@ -48,9 +48,10 @@
             </form>
           </template>    
           <template is="dom-if" if="[[signedIn]]">
-            <label for="token">signed in</label><br>
-            <small>[[accessToken]]</small>
-
+            <div>
+              <label for="token">signed in</label><br>
+              <small>[[accessToken]]</small>
+            </div>
             <button on-tap="getInvestorDetails">Get data</button>
           </template>                
 
@@ -59,6 +60,7 @@
             access-token="[[accessToken]]" 
             first-name="{{firstName}}"
             last-name="{{lastName}}"
+            subscribed-to-newsletter="{{subscribedToNewsletter}}"
             iban="{{iban}}"
             name-at-bank="{{nameAtBank}}"
             twitter="{{twitter}}"
@@ -69,43 +71,51 @@
             total-investments="{{totalInvestments}}"                                                                                         
           ></caas-investor>
 
-          <ul>
-            <li>
-              First name: {{firstName}}
-            </li>
-            <li>
-              Last name: {{lastName}}
-            </li>
-            <li>
-              Iban: {{iban}}
-            </li>
-            <li>
-              Name at bank: {{nameAtBank}}
-            </li>
-            <li>
-              Twitter: {{twitter}}
-            </li>
-            <li>
-              Facebook: {{facebook}}
-            </li>
-            <li>
-              LinkedIn: {{linkedin}}
-            </li>
-            <li>
-              City: {{address.city}}
-            </li>
-            <li>
-              Country: {{address.country}}
-            </li>   
-            <li>
-              Currently invested capital: {{currentlyInvestedCapital}}
-            </li>      
-            <li>
-              Total investment: {{totalInvestments}}
-            </li>                                                                                                                                   
-          </ul>
+          <template is="dom-if" if="[[investorDetailsReceived]]">
+            <ul>
+              <li>
+                First name: [[firstName]]
+              </li>
+              <li>
+                Last name: [[lastName]]
+              </li>
+              <li>
+                Subscribed to newsletter: [[newsletter]]        
+              <li>
+                Iban: [[iban]]
+              </li>
+              <li>
+                Name at bank: [[nameAtBank]]
+              </li>
+              <li>
+                Twitter: [[twitter]]
+              </li>
+              <li>
+                Facebook: [[facebook]]
+              </li>
+              <li>
+                LinkedIn: [[linkedin]]
+              </li>
+              <li>
+                City: [[address.city]]
+              </li>
+              <li>
+                Country: [[address.country]]
+              </li>   
+              <li>
+                Currently invested capital: [[currentlyInvestedCapital]]
+              </li>      
+              <li>
+                Total investment: [[totalInvestments]]
+              </li>                                                                                                                                   
+            </ul>
 
+            Subscribed to newsletter: [[subscribedToNewsletter]]
+            <button on-tap="changeSubscriptionToNewsletter">Change subscription</button>
+          </template>
+          
           <script>
+            var investorDetailsReceived = false;
             var d = document.querySelector('#demo');
             var auth = document.querySelector('#auth');
             var inv = document.querySelector('caas-investor');
@@ -123,6 +133,16 @@
               evt.preventDefault();
               inv.getInvestorDetails();
             }
+
+            d.changeSubscriptionToNewsletter = function (evt) {
+              evt.preventDefault();              
+              d.subscribedToNewsletter = !d.subscribedToNewsletter;
+              inv.saveNewsletterSubscription();              
+            }
+
+            inv.addEventListener('investor-details-obtained', function(data) {
+              d.investorDetailsReceived = true;
+            })
 
             auth.addEventListener('sign-in-error', function(data) {
               alert('error while logging in!');
