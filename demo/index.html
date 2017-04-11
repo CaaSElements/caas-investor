@@ -60,6 +60,7 @@
             access-token="[[accessToken]]" 
             first-name="{{firstName}}"
             last-name="{{lastName}}"
+            privacy="{{privacy}}"
             subscribed-to-newsletter="{{subscribedToNewsletter}}"
             iban="{{iban}}"
             name-at-bank="{{nameAtBank}}"
@@ -74,11 +75,14 @@
           <template is="dom-if" if="[[investorDetailsReceived]]">
             <ul>
               <li>
-                First name: [[firstName]]
+                First name: <input type="text" value="{{firstName::change}}">
               </li>
               <li>
-                Last name: [[lastName]]
+                Last name:  <input type="text" value="{{lastName::change}}">
               </li>
+              <li>
+                Privacy: <input type="checkbox" checked="{{privacy::change}}">
+              </li>              
               <li>
                 Subscribed to newsletter: [[newsletter]]        
               <li>
@@ -97,11 +101,23 @@
                 LinkedIn: [[linkedin]]
               </li>
               <li>
-                City: [[address.city]]
+                Street:  <input type="text" value="{{address.street::change}}">
               </li>
               <li>
-                Country: [[address.country]]
-              </li>   
+                houseNumber:  <input type="text" value="{{address.houseNumber::change}}">
+              </li>
+              <li>
+                postalCode:  <input type="text" value="{{address.postalCode::change}}">
+              </li>
+              <li>
+                city:  <input type="text" value="{{address.city::change}}">
+              </li>
+              <li>
+                region:  <input type="text" value="{{address.region::change}}">
+              </li>     
+              <li>
+                country:  <input type="text" value="{{address.country::change}}">
+              </li>                               
               <li>
                 Currently invested capital: [[currentlyInvestedCapital]]
               </li>      
@@ -109,9 +125,10 @@
                 Total investment: [[totalInvestments]]
               </li>                                                                                                                                   
             </ul>
+            <button on-tap="saveUpdatedProfile">Save Profile</button>
 
             Subscribed to newsletter: [[subscribedToNewsletter]]
-            <button on-tap="changeSubscriptionToNewsletter">Change subscription</button>
+            <button on-tap="changeSubscriptionToNewsletter">Change subscription</button>            
           </template>
           
           <script>
@@ -139,6 +156,11 @@
               d.subscribedToNewsletter = !d.subscribedToNewsletter;
               inv.saveNewsletterSubscription();              
             }
+
+            d.saveUpdatedProfile = function (evt) {
+              evt.preventDefault();              
+              inv.saveUpdatedProfile();              
+            }            
 
             inv.addEventListener('investor-details-obtained', function(data) {
               d.investorDetailsReceived = true;
