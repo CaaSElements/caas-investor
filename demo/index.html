@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>caas-investor demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../caas-investor.html">
+    <link rel="import" href="../../caas-auth/caas-auth.html">    
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+      small {
+        word-wrap: break-word;
+      }
+
+      .centered {
+        max-width: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic caas-investor demo</h3>
+      <demo-snippet>
+        <template is="dom-bind" id="demo">
+          <caas-auth
+            id="auth"
+            api-endpoint="http://canapi.local"
+            signed-in="{{signedIn}}"
+            access-token="{{accessToken}}"
+            user-id="{{investorId}}"
+          ></caas-auth>
+
+          <h2>Sign in</h2>
+
+          <template is="dom-if" if="[[!signedIn]]">
+            <form on-submit="signIn">
+              <label for="username">username</label><br>
+              <input type="text" id="username" value="investor@caastest.local"><p>
+              <label for="password">password</label><br>
+              <input type="password" id="password" value="abc123"><p>
+              <input type="submit" value="Sign In">
+            </form>
+          </template>    
+          <template is="dom-if" if="[[signedIn]]">
+            <label for="token">signed in</label><br>
+            <small>[[accessToken]]</small>
+
+            <button on-tap="getInvestorDetails">Get data</button>
+          </template>                
+
+          <caas-investor api-endpoint="http://canapi.local" 
+            investor-id="[[investorId]]" 
+            access-token="[[accessToken]]" 
+            first-name="{{firstName}}"
+            last-name="{{lastName}}"
+            iban="{{iban}}"
+            name-at-bank="{{nameAtBank}}"
+            twitter="{{twitter}}"
+            facebook="{{facebook}}"
+            linkedin="{{linkedin}}"
+            address="{{address}}"                            
+            currently-invested-capital="{{currentlyInvestedCapital}}"                                                                                    
+            total-investments="{{totalInvestments}}"                                                                                         
+          ></caas-investor>
+
+          <ul>
+            <li>
+              First name: {{firstName}}
+            </li>
+            <li>
+              Last name: {{lastName}}
+            </li>
+            <li>
+              Iban: {{iban}}
+            </li>
+            <li>
+              Name at bank: {{nameAtBank}}
+            </li>
+            <li>
+              Twitter: {{twitter}}
+            </li>
+            <li>
+              Facebook: {{facebook}}
+            </li>
+            <li>
+              LinkedIn: {{linkedin}}
+            </li>
+            <li>
+              City: {{address.city}}
+            </li>
+            <li>
+              Country: {{address.country}}
+            </li>   
+            <li>
+              Currently invested capital: {{currentlyInvestedCapital}}
+            </li>      
+            <li>
+              Total investment: {{totalInvestments}}
+            </li>                                                                                                                                   
+          </ul>
+
+          <script>
+            var d = document.querySelector('#demo');
+            var auth = document.querySelector('#auth');
+            var inv = document.querySelector('caas-investor');
+
+            d.signIn = function(evt) {
+              evt.preventDefault();
+              console.log(auth)
+              auth.signIn(
+                document.querySelector('#username').value,
+                document.querySelector('#password').value,
+                'investor'
+              );
+            }                      
+            d.getInvestorDetails = function(evt) {
+              evt.preventDefault();
+              inv.getInvestorDetails();
+            }
+
+            auth.addEventListener('sign-in-error', function(data) {
+              alert('error while logging in!');
+            })         
+          </script>   
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>

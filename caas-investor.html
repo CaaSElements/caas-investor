@@ -1,0 +1,150 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`caas-investor`
+Polymer Investor Element for Crowdfunding as a Service Solutions
+
+@demo demo/index.html 
+-->
+
+<dom-module id="caas-investor">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <iron-ajax
+      id="getInvestorDetails"
+      url="[[apiEndpoint]]/investors/[[investorId]]"
+      handle-as="json"
+      headers="[[_requestHeaders]]"
+      method="GET"
+      last-response="{{_investorData}}"
+      on-response="_handleGetInvestorResponse"
+      on-error="_handleGetInvestorError"
+    ></iron-ajax>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'caas-investor',
+
+      properties: {
+        /**
+        * The Server side API endpoint
+        */
+        apiEndpoint: {
+          type: String,
+          notify: true
+        },
+
+        /**
+        * The access token (JSON web token) associated with the current user session
+        */
+        accessToken: {
+          type: String
+        },        
+
+        /**
+        * The user id associated with the current user session
+        */
+        investorId: {
+          type: String
+        },
+
+        firstName: {
+          type: String,
+          notify: true
+        },
+
+        lastName: {
+          type: String,
+          notify: true
+        },
+
+        iban: {
+          type: String,
+          notify: true
+        },
+
+        nameAtBank: {
+          type: String,
+          notify: true
+        },
+
+        twitter: {
+          type: String,
+          notify: true
+        },
+
+        facebook: {
+          type: String,
+          notify: true
+        },
+
+        linkedin: {
+          type: String,
+          notify: true
+        },                        
+
+        address: {
+          type: Object,
+          notify: true
+        },    
+
+        currentlyInvestedCapital: {
+          type: Number,
+          notify: true
+        },
+
+        totalInvestments: {
+          type: Number,
+          notify: true
+        },                
+
+        _requestHeaders: {
+          type: Object,
+          computed: '_computeRequestHeaders(accessToken)'
+        },
+
+        _investorData: {
+          type: Object,
+          value: {},
+          observer: 'setInvestorDetails'
+        }        
+      },
+      getInvestorDetails: function () {
+        this.$.getInvestorDetails.generateRequest();
+      },
+      _computeRequestHeaders: function(accessToken) {
+        return {
+          'authorization': 'Bearer ' + accessToken 
+        }
+      },
+
+      _handleGetInvestorError: function(evt) {
+        console.error(evt)
+      },
+
+      _handleGetInvestorResponse: function(resp) {
+        console.log(resp)
+      },      
+      setInvestorDetails: function (investorData) {
+        this.set('firstName', investorData.firstName);
+        this.set('lastName', investorData.lastName);        
+        this.set('iban', investorData.iban);        
+        this.set('nameAtBank', investorData.bankTenaam);        
+        this.set('twitter', investorData.twitter);        
+        this.set('facebook', investorData.facebook);        
+        this.set('linkedin', investorData.linkedin);                                
+        this.set('address', investorData.address);        
+        this.set('currentlyInvestedCapital', investorData.currentlyInvestedCapital);        
+        this.set('totalInvestments', investorData.totalInvestments);        
+      }
+    });
+  </script>
+</dom-module>
