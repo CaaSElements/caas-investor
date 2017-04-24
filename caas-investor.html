@@ -11,7 +11,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
   <template>
 
     <iron-ajax
-      id="getInvestorDetails"
+      id="getInvestorProfile"
       url="[[apiEndpoint]]/investors/[[investorId]]"
       handle-as="json"
       headers="[[_requestHeaders]]"
@@ -155,8 +155,8 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           observer: '_setInvestorDetails'
         }        
       },
-      getInvestorDetails: function () {
-        this.$.getInvestorDetails.generateRequest();
+      getInvestorProfile: function () {
+        this.$.getInvestorProfile.generateRequest();
       },
 
       saveNewsletterSubscription: function (evt) {
@@ -217,7 +217,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.fire('subscribe-request-response')
 
         // Generate GET request on succesfull POST
-        this.$.getInvestorDetails.generateRequest();        
+        this.$.getInvestorProfile.generateRequest();        
       },
 
       _handleSubscribtionResponseError: function (evt) {
@@ -235,7 +235,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.fire('update-profile-request-response')
 
         // Generate GET request on succesfull PUT
-        this.$.getInvestorDetails.generateRequest();        
+        this.$.getInvestorProfile.generateRequest();        
       },
 
       _handleProfileUpdateResponseError: function (evt) {
