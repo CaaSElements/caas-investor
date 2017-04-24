@@ -78,22 +78,33 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           type: String
         },
 
+        /**
+        * First Name
+        */        
         firstName: {
           type: String,
           notify: true
         },
 
+        /**
+        * Last Name
+        */        
         lastName: {
           type: String,
           notify: true
-        },
+        },      
 
-
+        /**
+        * Exposes whether the user is subscribed to the newsletter
+        */        
         subscribedToNewsletter: {
           type: Boolean,
           notify: true
         },
 
+        /**
+        * IBAN
+        */        
         iban: {
           type: String,
           notify: true
@@ -107,21 +118,33 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           notify: true
         },
 
+        /**
+        * Twitter Profile URL
+        */        
         twitterUrl: {
           type: String,
           notify: true
         },
 
+        /**
+        * Facebook Profile URL
+        */        
         facebookUrl: {
           type: String,
           notify: true
         },
 
+        /**
+        * LinkedIn Profile URL
+        */        
         linkedinUrl: {
           type: String,
           notify: true
         },
 
+        /**
+        * Postal Address
+        */        
         address: {
           type: Object,
           notify: true
@@ -196,7 +219,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       },
 
       _computeUpdatedProfileBody: function (firstName, lastName, privacy, addressChange) {
-        var address= addressChange.base;
+        var address = addressChange.base;
         return {
           'firstName': firstName,
           'lastName': lastName,
