@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../caas-auth-behavior/caas-auth-behavior.html">
 
 <!--
 `caas-investor`
@@ -14,7 +15,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       id="getInvestorProfile"
       url="[[apiEndpoint]]/investors/[[investorId]]"
       handle-as="json"
-      headers="[[_requestHeaders]]"
+      headers="[[_authHeader]]"
       method="GET"
       last-response="{{_investorData}}"
       on-response="_handleGetInvestorResponse"
@@ -28,7 +29,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       body='{"subscribed": [[subscribedToNewsletter]]}'
       handle-as="json"
       content-type="application/json"
-      headers="[[_requestHeaders]]"      
+      headers="[[_authHeader]]"      
       method="POST"
       on-request="_handleSubscribtionRequestSent"
       on-response="_handleSubscribtionResponse"
@@ -41,7 +42,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       body='[[_updatedProfileBody]]'
       handle-as="json"
       content-type="application/json"
-      headers="[[_requestHeaders]]"      
+      headers="[[_authHeader]]"      
       method="PUT"
       on-request="_handleProfileUpdateRequestSent"
       on-response="_handleProfileUpdateResponse"
@@ -54,6 +55,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
     Polymer({
 
       is: 'caas-investor',
+      behaviors: [CaasAuthBehavior],
 
       properties: {
         /**
@@ -62,14 +64,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         apiEndpoint: {
           type: String,
           notify: true
-        },
-
-        /**
-        * The access token (JSON web token) associated with the current user session
-        */
-        accessToken: {
-          type: String
-        },        
+        },      
 
         /**
         * The user id associated with the current user session
@@ -174,11 +169,6 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           computed: '_computeUpdatedProfileBody(firstName, lastName, privacy, address.*)'
         },
 
-        _requestHeaders: {
-          type: Object,
-          computed: '_computeRequestHeaders(accessToken)'
-        },
-
         _investorData: {
           type: Object,
           value: {},
@@ -196,12 +186,6 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
 
       saveUpdatedProfile: function (evt) {
         this.$.updateInvestorProfile.generateRequest();
-      },
-
-      _computeRequestHeaders: function(accessToken) {
-        return {
-          'authorization': 'Bearer ' + accessToken 
-        }
       }, 
 
       _setInvestorProfile: function (investorData) {

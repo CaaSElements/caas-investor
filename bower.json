@@ -13,14 +13,14 @@
   
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
-    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3"
-
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
+    "caas-auth-behavior": "CaaSElements/caas-auth-behavior"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
-    "caas-auth": "CaaSElements/caas-auth"    
+    "caas-auth": "CaaSElements/caas-auth"
   }
 }
