@@ -121,7 +121,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         linkedin: {
           type: String,
           notify: true
-        },                        
+        },
 
         address: {
           type: Object,
@@ -156,6 +156,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           observer: '_setInvestorDetails'
         }        
       },
+      
       getInvestorProfile: function () {
         this.$.getInvestorProfile.generateRequest();
       },
@@ -176,18 +177,17 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
 
       _setInvestorDetails: function (investorData) {
         this.set('firstName', investorData.firstName);
-        this.set('lastName', investorData.lastName);    
-        this.set('privacy', investorData.privacy);    
-        this.set('subscribedToNewsletter', investorData.newsletter || 0);    
-        this.set('iban', investorData.iban);        
-        this.set('nameAtBank', investorData.bankTenaam);        
-        this.set('twitter', investorData.twitter);        
-        this.set('facebook', investorData.facebook);        
-        this.set('linkedin', investorData.linkedin);                                
-        this.set('address', investorData.address);        
-        this.set('currentlyInvestedCapital', investorData.currentlyInvestedCapital);        
-        this.set('totalInvestments', investorData.totalInvestments);        
+        this.set('lastName', investorData.lastName);
+        this.set('privacy', investorData.privacy);
+        this.set('subscribedToNewsletter', investorData.newsletter || 0);
+        this.set('iban', investorData.iban);
+        this.set('nameAtBank', investorData.bankTenaam);
+        this.set('twitter', investorData.twitter);
+        this.set('facebook', investorData.facebook);
+        this.set('linkedin', investorData.linkedin);
+        this.set('address', investorData.address);
         this.setCurrentlyInvestedCapital(investorData.currentlyInvestedCapital);
+        this.set('totalInvestments', investorData.totalInvestments);
       },
 
       _computeUpdatedProfileBody: function (firstName, lastName, privacy, addressChange) {
@@ -215,11 +215,11 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.fire('subscribe-request-sent')
       },
 
-      _handleSubscribtionResponse: function (evt) {      
+      _handleSubscribtionResponse: function (evt) {
         this.fire('subscribe-request-response')
 
         // Generate GET request on succesfull POST
-        this.$.getInvestorProfile.generateRequest();        
+        this.$.getInvestorProfile.generateRequest();
       },
 
       _handleSubscribtionResponseError: function (evt) {
@@ -233,11 +233,11 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.fire('update-profile-request-sent')
       },
 
-      _handleProfileUpdateResponse: function (evt) {      
+      _handleProfileUpdateResponse: function (evt) {
         this.fire('update-profile-request-response')
 
         // Generate GET request on succesfull PUT
-        this.$.getInvestorProfile.generateRequest();        
+        this.$.getInvestorProfile.generateRequest();
       },
 
       _handleProfileUpdateResponseError: function (evt) {
