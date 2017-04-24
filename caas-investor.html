@@ -107,17 +107,17 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           notify: true
         },
 
-        twitter: {
+        twitterUrl: {
           type: String,
           notify: true
         },
 
-        facebook: {
+        facebookUrl: {
           type: String,
           notify: true
         },
 
-        linkedin: {
+        linkedinUrl: {
           type: String,
           notify: true
         },
@@ -186,10 +186,10 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.set('lastName', investorData.lastName);
         this.set('subscribedToNewsletter', investorData.newsletter || 0);
         this.set('iban', investorData.iban);
-        this.set('twitter', investorData.twitter);
-        this.set('facebook', investorData.facebook);
-        this.set('linkedin', investorData.linkedin);
         this.set('bankAccountName', investorData.bankTenaam);
+        this.set('twitterUrl', investorData.twitter);
+        this.set('facebookUrl', investorData.facebook);
+        this.set('linkedinUrl', investorData.linkedin);
         this.set('address', investorData.address);
         this.setCurrentInvestment(investorData.currentlyInvestedCapital);
         this.setTotalInvestment(investorData.totalInvestments);
