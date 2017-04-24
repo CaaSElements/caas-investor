@@ -198,8 +198,8 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.set('facebookUrl', investorData.facebook);
         this.set('linkedinUrl', investorData.linkedin);
         this.set('address', investorData.address);
-        this.setCurrentInvestment(investorData.currentlyInvestedCapital);
-        this.setTotalInvestment(investorData.totalInvestments);
+        this._setCurrentInvestment(investorData.currentlyInvestedCapital);
+        this._setTotalInvestment(investorData.totalInvestments);
       },
 
       _computeUpdatedProfileBody: function (firstName, lastName, privacy, addressChange) {

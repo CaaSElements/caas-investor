@@ -64,12 +64,12 @@
             subscribed-to-newsletter="{{subscribedToNewsletter}}"
             iban="{{iban}}"
             name-at-bank="{{nameAtBank}}"
-            twitter="{{twitter}}"
-            facebook="{{facebook}}"
-            linkedin="{{linkedin}}"
+            twitter-url="{{twitter}}"
+            facebook-url="{{facebook}}"
+            linkedin-url="{{linkedin}}"
             address="{{address}}"                            
-            currently-invested-capital="{{currentlyInvestedCapital}}"                                                                                    
-            total-investments="{{totalInvestments}}"                                                                                         
+            current-investment-="{{currentlyInvestedCapital}}"                                                                                    
+            total-investment="{{totalInvestments}}"                                                                                         
           ></caas-investor>
 
           <template is="dom-if" if="[[investorDetailsReceived]]">
@@ -148,7 +148,7 @@
             }                      
             d.getInvestorDetails = function(evt) {
               evt.preventDefault();
-              inv.getInvestorDetails();
+              inv.getInvestorProfile();
             }
 
             d.changeSubscriptionToNewsletter = function (evt) {
