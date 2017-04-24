@@ -153,10 +153,10 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         _investorData: {
           type: Object,
           value: {},
-          observer: '_setInvestorDetails'
+          observer: '_setInvestorProfile'
         }        
       },
-      
+
       getInvestorProfile: function () {
         this.$.getInvestorProfile.generateRequest();
       },
@@ -175,7 +175,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         }
       }, 
 
-      _setInvestorDetails: function (investorData) {
+      _setInvestorProfile: function (investorData) {
         this.set('firstName', investorData.firstName);
         this.set('lastName', investorData.lastName);
         this.set('privacy', investorData.privacy);
