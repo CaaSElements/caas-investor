@@ -124,15 +124,22 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           notify: true
         },    
 
-        currentlyInvestedCapital: {
+        /**
+        * Exposes the currently invested capital, in euros.
+        */        
+        currentInvestment: {
           type: Number,
           notify: true,
           readOnly: true
         },
 
-        totalInvestments: {
+        /**
+        * Exposes the all-time total invested capital, in euros.
+        */        
+        totalInvestment: {
           type: Number,
-          notify: true
+          notify: true,
+          readOnly: true
         },      
 
         _updatedProfileBody: {
@@ -181,8 +188,8 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.set('facebook', investorData.facebook);
         this.set('linkedin', investorData.linkedin);
         this.set('address', investorData.address);
-        this.setCurrentlyInvestedCapital(investorData.currentlyInvestedCapital);
-        this.set('totalInvestments', investorData.totalInvestments);
+        this.setCurrentInvestment(investorData.currentlyInvestedCapital);
+        this.setTotalInvestment(investorData.totalInvestments);
       },
 
       _computeUpdatedProfileBody: function (firstName, lastName, privacy, addressChange) {
