@@ -60,10 +60,9 @@
             access-token="[[accessToken]]" 
             first-name="{{firstName}}"
             last-name="{{lastName}}"
-            privacy="{{privacy}}"
             subscribed-to-newsletter="{{subscribedToNewsletter}}"
             iban="{{iban}}"
-            name-at-bank="{{nameAtBank}}"
+            bank-account-name="{{bankAccountName}}"
             twitter-url="{{twitter}}"
             facebook-url="{{facebook}}"
             linkedin-url="{{linkedin}}"
@@ -79,17 +78,14 @@
               </li>
               <li>
                 Last name:  <input type="text" value="{{lastName::change}}">
-              </li>
-              <li>
-                Privacy: <input type="checkbox" checked="{{privacy::change}}">
-              </li>              
+              </li>            
               <li>
                 Subscribed to newsletter: [[newsletter]]        
               <li>
                 Iban: [[iban]]
               </li>
               <li>
-                Name at bank: [[nameAtBank]]
+                Bank account name: [[bankAccountName]]
               </li>
               <li>
                 Twitter: [[twitter]]
