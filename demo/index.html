@@ -68,7 +68,10 @@
             linkedin="{{linkedin}}"
             address="{{address}}"                            
             currently-invested-capital="{{currentlyInvestedCapital}}"                                                                                    
-            total-investments="{{totalInvestments}}"                                                                                         
+            total-investments="{{totalInvestments}}"       
+            total-invested-capital="{{totalInvestedCapital}}"
+            currently-invested-capital="{{currentlyInvestedCapital}}"
+            campaigns="{{campaigns}}"                                                                              
           ></caas-investor>
 
           <template is="dom-if" if="[[investorDetailsReceived]]">
@@ -109,11 +112,46 @@
                 Total investment: [[totalInvestments]]
               </li>                                                                                                                                   
             </ul>
-
             Subscribed to newsletter: [[subscribedToNewsletter]]
             <button on-tap="changeSubscriptionToNewsletter">Change subscription</button>
           </template>
           
+          <template is="dom-if" if="[[investorRepaymentReceived]]">
+            <ul>
+              <li>
+                Total invested capital: [[totalInvestedCapital]]
+              </li>
+              <li>
+                Currently invested capital: [[currentlyInvestedCapital]]
+              </li>   
+              <template is="dom-repeat" items="[[campaigns]]">
+                <template is="dom-repeat" items="[[item.payments]]" as="repayment">
+                  <li>
+                    Project Name: [[repayment.campaignProjectNaam]]
+                  </li>           
+                  <li>
+                    Project completed: [[repayment.completed]]
+                  </li>      
+                  <li>
+                    Date: [[repayment.date]]
+                  </li>  
+                  <li>
+                    Paid Payments: [[repayment.currentPaymentsStatus.paidPayments]]
+                  </li>          
+                  <li>
+                    Unpaid Payments: [[repayment.currentPaymentsStatus.unpaidPayments]]
+                  </li>                                           
+                  <li>
+                    Percentage remaining debt: [[repayment.remainingDebtPercentage]]
+                  </li>                      
+                  <li>
+                    totalAmountThisPayment: [[repayment.totalAmountThisPayment]]
+                  </li>                                                                                                                                
+                </template>   
+              </template>   
+            </ul>      
+          </template>
+
           <script>
             var investorDetailsReceived = false;
             var d = document.querySelector('#demo');
@@ -143,6 +181,10 @@
             inv.addEventListener('investor-details-obtained', function(data) {
               d.investorDetailsReceived = true;
             })
+
+            inv.addEventListener('investor-repayment-obtained', function(data) {
+              d.investorRepaymentReceived = true;
+            })            
 
             auth.addEventListener('sign-in-error', function(data) {
               alert('error while logging in!');

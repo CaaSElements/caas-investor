@@ -28,6 +28,18 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
     ></iron-ajax>
 
     <iron-ajax
+      id="getInvestorRepayments"
+      url="[[apiEndpoint]]/investors/[[investorId]]/repayments"
+      handle-as="json"
+      headers="[[_requestHeaders]]"
+      method="GET"
+      last-response="{{_investorRepaymentData}}"
+      on-response="_handleGetInvestorRepaymentResponse"
+      on-error="_handleGetInvestorRepaymentError"
+      auto="[[accessToken]]"
+    ></iron-ajax>    
+
+    <iron-ajax
       id="subscription"
       url="[[apiEndpoint]]/investors/[[investorId]]/newsletter"
       body='{"subscribed": [[subscribedToNewsletter]]}'
@@ -123,7 +135,23 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         totalInvestments: {
           type: Number,
           notify: true
-        },                
+        },      
+
+        totalInvestedCapital: {
+          type: Number,
+          notify: true          
+        },   
+
+        currentlyInvestedCapital: {
+          type: Number,
+          notify: true          
+        },   
+
+        campaigns: {
+          type: Array,
+          value: [],
+          notify: true
+        },
 
         _requestHeaders: {
           type: Object,
@@ -134,7 +162,13 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           type: Object,
           value: {},
           observer: '_setInvestorDetails'
-        }        
+        },
+
+        _investorRepaymentData: {
+          type: Object,
+          value: {},
+          observer: '_setInvestorRepaymentDetails'
+        },
       },
       getInvestorDetails: function () {
         this.$.getInvestorDetails.generateRequest();
@@ -164,9 +198,19 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.set('totalInvestments', investorData.totalInvestments);        
       },
 
+      _setInvestorRepaymentDetails: function (investorRepaymentData) {
+        this.set('totalInvestedCapital', investorRepaymentData.totalInvestedCapital);
+        this.set('currentlyInvestedCapital', investorRepaymentData.currentlyInvestedCapital);
+        this.set('campaigns', investorRepaymentData.campaigns);                
+      },
+
       _handleGetInvestorResponse: function(response) {
         this.fire('investor-details-obtained')
-      },         
+      },      
+
+      _handleGetInvestorRepaymentResponse: function(response) {
+        this.fire('investor-repayment-obtained')
+      },     
 
       _handleGetInvestorError: function(evt) {
         this.fire('investor-details-error', {
@@ -174,6 +218,13 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           response: evt.detail.request.xhr.response
         });
       },      
+
+      _handleGetInvestorRepaymentError: function(evt) {
+        this.fire('investor-repayment-error', {
+          message: evt.detail.error.message,
+          response: evt.detail.request.xhr.response
+        });
+      },           
 
       _handleSubscribtionRequestSent: function (evt) {
         this.fire('subscribe-request-sent')
