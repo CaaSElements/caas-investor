@@ -24,7 +24,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
     ></iron-ajax>
 
     <iron-ajax
-      id="subscription"
+      id="saveNewsLetterSubscription"
       url="[[apiEndpoint]]/investors/[[investorId]]/newsletter"
       body='{"subscribed": [[subscribedToNewsletter]]}'
       handle-as="json"
@@ -37,7 +37,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
     ></iron-ajax>    
 
     <iron-ajax
-      id="updateInvestorProfile"
+      id="saveInvestorProfile"
       url="[[apiEndpoint]]/investors/[[investorId]]"
       body='[[_updatedProfileBody]]'
       handle-as="json"
@@ -176,17 +176,18 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         }        
       },
 
-      getInvestorProfile: function () {
+      getData: function () {
         this.$.getInvestorProfile.generateRequest();
       },
 
-      saveNewsletterSubscription: function (evt) {
-        this.$.subscription.generateRequest();
+      save: function () {
+        this.$.saveInvestorProfile.generateRequest();
+        this.saveNewsletterSubscription();
       },
 
-      saveUpdatedProfile: function (evt) {
-        this.$.updateInvestorProfile.generateRequest();
-      }, 
+      saveNewsletterSubscription: function () {
+        this.$.saveNewsLetterSubscription.generateRequest();
+      },
 
       _setInvestorProfile: function (investorData) {
         this.set('firstName', investorData.firstName);
@@ -194,7 +195,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.set('subscribedToNewsletter', investorData.newsletter || 0);
         this.set('iban', investorData.iban);
         this.set('bankAccountName', investorData.bankTenaam);
-        this.set('twitterUrl', investorData.twitter);
+        this.set('twittererUrl', investorData.twitter);
         this.set('facebookUrl', investorData.facebook);
         this.set('linkedinUrl', investorData.linkedin);
         this.set('address', investorData.address);
@@ -230,7 +231,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.fire('subscribe-request-response')
 
         // Generate GET request on succesfull POST
-        this.$.getInvestorProfile.generateRequest();
+        this.getData();
       },
 
       _handleSubscribtionResponseError: function (evt) {
@@ -248,7 +249,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.fire('update-profile-request-response')
 
         // Generate GET request on succesfull PUT
-        this.$.getInvestorProfile.generateRequest();
+        this.getData();
       },
 
       _handleProfileUpdateResponseError: function (evt) {
