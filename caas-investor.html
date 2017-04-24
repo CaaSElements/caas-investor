@@ -130,7 +130,8 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
 
         currentlyInvestedCapital: {
           type: Number,
-          notify: true
+          notify: true,
+          readOnly: true
         },
 
         totalInvestments: {
@@ -186,6 +187,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.set('address', investorData.address);        
         this.set('currentlyInvestedCapital', investorData.currentlyInvestedCapital);        
         this.set('totalInvestments', investorData.totalInvestments);        
+        this.setCurrentlyInvestedCapital(investorData.currentlyInvestedCapital);
       },
 
       _computeUpdatedProfileBody: function (firstName, lastName, privacy, addressChange) {
