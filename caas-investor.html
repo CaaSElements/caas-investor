@@ -28,6 +28,18 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
     ></iron-ajax>
 
     <iron-ajax
+      id="getInvestorContracts"
+      url="[[apiEndpoint]]/investors/[[investorId]]/contracts"
+      handle-as="json"
+      headers="[[_requestHeaders]]"
+      method="GET"
+      last-response="{{_investorContractsData}}"
+      on-response="_handleGetInvestorContractsResponse"
+      on-error="_handleGetInvestorContractsError"
+      auto="[[accessToken]]"
+    ></iron-ajax>
+
+    <iron-ajax
       id="subscription"
       url="[[apiEndpoint]]/investors/[[investorId]]/newsletter"
       body='{"subscribed": [[subscribedToNewsletter]]}'
@@ -123,7 +135,12 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         totalInvestments: {
           type: Number,
           notify: true
-        },                
+        },     
+
+        contracts: {
+          type: Array,
+          notify: true
+        },
 
         _requestHeaders: {
           type: Object,
@@ -134,7 +151,13 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           type: Object,
           value: {},
           observer: '_setInvestorDetails'
-        }        
+        },
+
+        _investorContractsData: {
+          type: Object,
+          value: {},
+          observer: '_setInvestorContractsDetails'
+        },
       },
       getInvestorDetails: function () {
         this.$.getInvestorDetails.generateRequest();
@@ -164,6 +187,10 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.set('totalInvestments', investorData.totalInvestments);        
       },
 
+      _setInvestorContractsDetails: function (investorContractsData) {
+        this.set('contracts', investorContractsData);    
+      },
+
       _handleGetInvestorResponse: function(response) {
         this.fire('investor-details-obtained')
       },         
@@ -173,7 +200,18 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           message: evt.detail.error.message,
           response: evt.detail.request.xhr.response
         });
-      },      
+      },  
+
+      _handleGetInvestorContractsResponse: function(response) {
+        this.fire('investor-contracts-obtained')
+      },         
+
+      _handleGetInvestorContractsError: function(evt) {
+        this.fire('investor-contracts-error', {
+          message: evt.detail.error.message,
+          response: evt.detail.request.xhr.response
+        });
+      },                
 
       _handleSubscribtionRequestSent: function (evt) {
         this.fire('subscribe-request-sent')
