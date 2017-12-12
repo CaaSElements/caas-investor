@@ -17,10 +17,6 @@
       small {
         word-wrap: break-word;
       }
-
-      .centered {
-        max-width: 600px;
-      }
     </style>
   </head>
   <body>
@@ -52,40 +48,41 @@
               <label for="token">signed in</label><br>
               <small>[[accessToken]]</small>
             </div>
-            <button on-tap="getInvestorDetails">Get data</button>
+            <button on-tap="getData">Get data</button>
           </template>                
 
-          <caas-investor api-endpoint="http://canapi.local" 
+          <caas-investor
+            api-endpoint="http://canapi.local" 
             investor-id="[[investorId]]" 
             access-token="[[accessToken]]" 
             first-name="{{firstName}}"
             last-name="{{lastName}}"
             subscribed-to-newsletter="{{subscribedToNewsletter}}"
             iban="{{iban}}"
-            name-at-bank="{{nameAtBank}}"
-            twitter="{{twitter}}"
-            facebook="{{facebook}}"
-            linkedin="{{linkedin}}"
+            bank-account-name="{{bankAccountName}}"
+            twitter-url="{{twitter}}"
+            facebook-url="{{facebook}}"
+            linkedin-url="{{linkedin}}"
             address="{{address}}"                            
-            currently-invested-capital="{{currentlyInvestedCapital}}"                                                                                    
-            total-investments="{{totalInvestments}}"                                                                                         
+            current-investment-="{{currentlyInvestedCapital}}"                                                                                    
+            total-investment="{{totalInvestments}}"                                                                                         
           ></caas-investor>
 
           <template is="dom-if" if="[[investorDetailsReceived]]">
             <ul>
               <li>
-                First name: [[firstName]]
+                First name: <input type="text" value="{{firstName::change}}">
               </li>
               <li>
-                Last name: [[lastName]]
-              </li>
+                Last name:  <input type="text" value="{{lastName::change}}">
+              </li>            
               <li>
-                Subscribed to newsletter: [[newsletter]]        
+                Subscribed to newsletter: <input type="checkbox" checked="{{subscribedToNewsletter::change}}" on-change="saveSubscriptionToNewsletter">
               <li>
                 Iban: [[iban]]
               </li>
               <li>
-                Name at bank: [[nameAtBank]]
+                Bank account name: [[bankAccountName]]
               </li>
               <li>
                 Twitter: [[twitter]]
@@ -97,11 +94,23 @@
                 LinkedIn: [[linkedin]]
               </li>
               <li>
-                City: [[address.city]]
+                Street:  <input type="text" value="{{address.street::change}}">
               </li>
               <li>
-                Country: [[address.country]]
-              </li>   
+                houseNumber:  <input type="text" value="{{address.houseNumber::change}}">
+              </li>
+              <li>
+                postalCode:  <input type="text" value="{{address.postalCode::change}}">
+              </li>
+              <li>
+                city:  <input type="text" value="{{address.city::change}}">
+              </li>
+              <li>
+                region:  <input type="text" value="{{address.region::change}}">
+              </li>     
+              <li>
+                country:  <input type="text" value="{{address.country::change}}">
+              </li>                               
               <li>
                 Currently invested capital: [[currentlyInvestedCapital]]
               </li>      
@@ -109,9 +118,7 @@
                 Total investment: [[totalInvestments]]
               </li>                                                                                                                                   
             </ul>
-
-            Subscribed to newsletter: [[subscribedToNewsletter]]
-            <button on-tap="changeSubscriptionToNewsletter">Change subscription</button>
+            <button on-tap="saveUpdatedProfile">Save Profile</button>
           </template>
           
           <script>
@@ -129,16 +136,21 @@
                 'investor'
               );
             }                      
-            d.getInvestorDetails = function(evt) {
+            d.getData = function(evt) {
               evt.preventDefault();
-              inv.getInvestorDetails();
+              inv.getData();
             }
 
-            d.changeSubscriptionToNewsletter = function (evt) {
+            d.saveSubscriptionToNewsletter = function (evt) {
               evt.preventDefault();              
-              d.subscribedToNewsletter = !d.subscribedToNewsletter;
+              // d.subscribedToNewsletter = !d.subscribedToNewsletter;
               inv.saveNewsletterSubscription();              
             }
+
+            d.saveUpdatedProfile = function (evt) {
+              evt.preventDefault();              
+              inv.save();              
+            }            
 
             inv.addEventListener('investor-details-obtained', function(data) {
               d.investorDetailsReceived = true;

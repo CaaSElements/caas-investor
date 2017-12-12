@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../caas-auth-behavior/caas-auth-behavior.html">
 
 <!--
 `caas-investor`
@@ -9,17 +10,12 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
 
 <dom-module id="caas-investor">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
 
     <iron-ajax
-      id="getInvestorDetails"
+      id="getInvestorProfile"
       url="[[apiEndpoint]]/investors/[[investorId]]"
       handle-as="json"
-      headers="[[_requestHeaders]]"
+      headers="[[_authHeader]]"
       method="GET"
       last-response="{{_investorData}}"
       on-response="_handleGetInvestorResponse"
@@ -28,17 +24,30 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
     ></iron-ajax>
 
     <iron-ajax
-      id="subscription"
+      id="saveNewsLetterSubscription"
       url="[[apiEndpoint]]/investors/[[investorId]]/newsletter"
       body='{"subscribed": [[subscribedToNewsletter]]}'
       handle-as="json"
       content-type="application/json"
-      headers="[[_requestHeaders]]"      
+      headers="[[_authHeader]]"      
       method="POST"
       on-request="_handleSubscribtionRequestSent"
       on-response="_handleSubscribtionResponse"
       on-error="_handleSubscribtionResponseError"
     ></iron-ajax>    
+
+    <iron-ajax
+      id="saveInvestorProfile"
+      url="[[apiEndpoint]]/investors/[[investorId]]"
+      body='[[_updatedProfileBody]]'
+      handle-as="json"
+      content-type="application/json"
+      headers="[[_authHeader]]"      
+      method="PUT"
+      on-request="_handleProfileUpdateRequestSent"
+      on-response="_handleProfileUpdateResponse"
+      on-error="_handleProfileUpdateResponseError"
+    ></iron-ajax>   
 
   </template>
 
@@ -46,6 +55,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
     Polymer({
 
       is: 'caas-investor',
+      behaviors: [CaasAuthBehavior],
 
       properties: {
         /**
@@ -54,14 +64,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         apiEndpoint: {
           type: String,
           notify: true
-        },
-
-        /**
-        * The access token (JSON web token) associated with the current user session
-        */
-        accessToken: {
-          type: String
-        },        
+        },      
 
         /**
         * The user id associated with the current user session
@@ -70,98 +73,143 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           type: String
         },
 
+        /**
+        * First Name
+        */        
         firstName: {
           type: String,
           notify: true
         },
 
+        /**
+        * Last Name
+        */        
         lastName: {
           type: String,
           notify: true
-        },
+        },      
 
+        /**
+        * Exposes whether the user is subscribed to the newsletter
+        */        
         subscribedToNewsletter: {
           type: Boolean,
           notify: true
         },
 
+        /**
+        * IBAN
+        */        
         iban: {
           type: String,
           notify: true
         },
 
-        nameAtBank: {
+        /**
+        * Bank Account Name
+        */        
+        bankAccountName: {
           type: String,
           notify: true
         },
 
-        twitter: {
+        /**
+        * Twitter Profile URL
+        */        
+        twitterUrl: {
           type: String,
           notify: true
         },
 
-        facebook: {
+        /**
+        * Facebook Profile URL
+        */        
+        facebookUrl: {
           type: String,
           notify: true
         },
 
-        linkedin: {
+        /**
+        * LinkedIn Profile URL
+        */        
+        linkedinUrl: {
           type: String,
           notify: true
-        },                        
+        },
 
+        /**
+        * Postal Address
+        */        
         address: {
           type: Object,
           notify: true
         },    
 
-        currentlyInvestedCapital: {
+        /**
+        * Exposes the currently invested capital, in euros.
+        */        
+        currentInvestment: {
           type: Number,
-          notify: true
+          notify: true,
+          readOnly: true
         },
 
-        totalInvestments: {
+        /**
+        * Exposes the all-time total invested capital, in euros.
+        */        
+        totalInvestment: {
           type: Number,
-          notify: true
-        },                
+          notify: true,
+          readOnly: true
+        },      
 
-        _requestHeaders: {
+        _updatedProfileBody: {
           type: Object,
-          computed: '_computeRequestHeaders(accessToken)'
+          value: {},
+          computed: '_computeUpdatedProfileBody(firstName, lastName, privacy, address.*)'
         },
 
         _investorData: {
           type: Object,
           value: {},
-          observer: '_setInvestorDetails'
+          observer: '_setInvestorProfile'
         }        
       },
-      getInvestorDetails: function () {
-        this.$.getInvestorDetails.generateRequest();
+
+      getData: function () {
+        this.$.getInvestorProfile.generateRequest();
       },
 
-      saveNewsletterSubscription: function (evt) {
-        this.$.subscription.generateRequest();
+      save: function () {
+        this.$.saveInvestorProfile.generateRequest();
+        this.saveNewsletterSubscription();
       },
 
-      _computeRequestHeaders: function(accessToken) {
-        return {
-          'authorization': 'Bearer ' + accessToken 
-        }
-      }, 
+      saveNewsletterSubscription: function () {
+        this.$.saveNewsLetterSubscription.generateRequest();
+      },
 
-      _setInvestorDetails: function (investorData) {
+      _setInvestorProfile: function (investorData) {
         this.set('firstName', investorData.firstName);
-        this.set('lastName', investorData.lastName);    
-        this.set('subscribedToNewsletter', investorData.newsletter || 0);    
-        this.set('iban', investorData.iban);        
-        this.set('nameAtBank', investorData.bankTenaam);        
-        this.set('twitter', investorData.twitter);        
-        this.set('facebook', investorData.facebook);        
-        this.set('linkedin', investorData.linkedin);                                
-        this.set('address', investorData.address);        
-        this.set('currentlyInvestedCapital', investorData.currentlyInvestedCapital);        
-        this.set('totalInvestments', investorData.totalInvestments);        
+        this.set('lastName', investorData.lastName);
+        this.set('subscribedToNewsletter', investorData.newsletter || 0);
+        this.set('iban', investorData.iban);
+        this.set('bankAccountName', investorData.bankTenaam);
+        this.set('twitterUrl', investorData.twitter);
+        this.set('facebookUrl', investorData.facebook);
+        this.set('linkedinUrl', investorData.linkedin);
+        this.set('address', investorData.address);
+        this._setCurrentInvestment(investorData.currentlyInvestedCapital);
+        this._setTotalInvestment(investorData.totalInvestments);
+      },
+
+      _computeUpdatedProfileBody: function (firstName, lastName, privacy, addressChange) {
+        var address = addressChange.base;
+        return {
+          'firstName': firstName,
+          'lastName': lastName,
+          'address': address
+        }
       },
 
       _handleGetInvestorResponse: function(response) {
@@ -179,11 +227,11 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         this.fire('subscribe-request-sent')
       },
 
-      _handleSubscribtionResponse: function (evt) {      
+      _handleSubscribtionResponse: function (evt) {
         this.fire('subscribe-request-response')
 
         // Generate GET request on succesfull POST
-        this.$.getInvestorDetails.generateRequest();        
+        this.getData();
       },
 
       _handleSubscribtionResponseError: function (evt) {
@@ -191,8 +239,25 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           message: evt.detail.error.message,
           response: evt.detail.request.xhr.response
         });
-      }
+      },
 
+      _handleProfileUpdateRequestSent: function (evt) {
+        this.fire('update-profile-request-sent')
+      },
+
+      _handleProfileUpdateResponse: function (evt) {
+        this.fire('update-profile-request-response')
+
+        // Generate GET request on succesfull PUT
+        this.getData();
+      },
+
+      _handleProfileUpdateResponseError: function (evt) {
+        this.fire('update-profile-request-error', {
+          message: evt.detail.error.message,
+          response: evt.detail.request.xhr.response
+        });
+      }      
     });
   </script>
 </dom-module>
