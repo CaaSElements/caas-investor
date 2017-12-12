@@ -64,8 +64,9 @@
             facebook-url="{{facebook}}"
             linkedin-url="{{linkedin}}"
             address="{{address}}"                            
-            current-investment-="{{currentlyInvestedCapital}}"                                                                                    
-            total-investment="{{totalInvestments}}"                                                                                         
+            currently-invested-capital="{{currentlyInvestedCapital}}"                                                                                    
+            total-investments="{{totalInvestments}}"           
+            contracts="{{contracts}}"                                                                                                                                                                  
           ></caas-investor>
 
           <template is="dom-if" if="[[investorDetailsReceived]]">
@@ -120,6 +121,18 @@
             </ul>
             <button on-tap="saveUpdatedProfile">Save Profile</button>
           </template>
+
+          <template is="dom-if" if="[[investorContractsDetailsReceived]]">
+            <p>Contract 1:</p>
+            <ul>
+              <li>
+                Investment: [[contracts.0.investment]]
+              </li>
+              <li>
+                Campagne naam: [[contracts.0.projectNaam]]
+              </li>
+            </ul>
+          </template>
           
           <script>
             var investorDetailsReceived = false;
@@ -154,6 +167,10 @@
 
             inv.addEventListener('investor-details-obtained', function(data) {
               d.investorDetailsReceived = true;
+            })
+
+            inv.addEventListener('investor-contracts-obtained', function(data) {
+              d.investorContractsDetailsReceived = true;
             })
 
             auth.addEventListener('sign-in-error', function(data) {
