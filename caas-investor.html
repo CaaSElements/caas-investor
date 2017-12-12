@@ -33,7 +33,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       on-response="_handleGetInvestorRepaymentResponse"
       on-error="_handleGetInvestorRepaymentError"
       auto="[[accessToken]]"
-    ></iron-ajax>    
+    ></iron-ajax>
 
     <iron-ajax
       id="getInvestorContracts"
@@ -193,17 +193,17 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           type: Number,
           readOnly: true,
           notify: true
-        },      
+        },
 
         totalInvestedCapital: {
           type: Number,
-          notify: true          
-        },   
+          notify: true
+        },
 
         currentlyInvestedCapital: {
           type: Number,
-          notify: true          
-        },   
+          notify: true
+        },
 
         campaigns: {
           type: Array,
@@ -235,8 +235,8 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         },
 
         _investorContractsData: {
-          type: Object,
-          value: {},
+          type: Array,
+          value: [],
           observer: '_setInvestorContractsDetails'
         }
       },
@@ -295,12 +295,12 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       _setInvestorRepaymentDetails: function (investorRepaymentData) {
         this.set('totalInvestedCapital', investorRepaymentData.totalInvestedCapital);
         this.set('currentlyInvestedCapital', investorRepaymentData.currentlyInvestedCapital);
-        this.set('campaigns', investorRepaymentData.campaigns);                
+        this.set('campaigns', investorRepaymentData.campaigns);
       },
 
       _handleGetInvestorResponse: function(response) {
         this.fire('investor-details-obtained')
-      },      
+      },
 
       _handleGetInvestorRepaymentResponse: function(response) {
         this.fire('investor-repayment-obtained')
@@ -330,7 +330,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           message: evt.detail.error.message,
           response: evt.detail.request.xhr.response
         });
-      },           
+      },
 
       _handleSubscribtionRequestSent: function (evt) {
         this.fire('subscribe-request-sent')
