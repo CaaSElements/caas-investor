@@ -21,6 +21,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       on-response="_handleGetInvestorResponse"
       on-error="_handleGetInvestorError"
       auto="[[accessToken]]"
+      loading="{{loading}}"
     ></iron-ajax>
 
     <iron-ajax
@@ -216,6 +217,20 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           notify: true,
         },
 
+        /**
+        * True while loading investor daa
+        */
+        loadingCampaignTypes: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        responseStatus: {
+            type: Object,
+            notify: true
+        },
+
         _updatedProfileBody: {
           type: Object,
           value: {},
@@ -254,8 +269,9 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       },
 
       save: function () {
+        this._setStatusResponseObject('loading');
         this.$.saveInvestorProfile.generateRequest();
-        this.saveNewsletterSubscription();
+        // this.saveNewsletterSubscription();
       },
 
       saveNewsletterSubscription: function () {
@@ -356,16 +372,30 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
 
       _handleProfileUpdateResponse: function (evt) {
         this.fire('update-profile-request-response')
-
+        this._setStatusResponseObject('success');
         // Generate GET request on succesfull PUT
         this.getData();
       },
 
-      _handleProfileUpdateResponseError: function (evt) {
+      _handleProfileUpdateResponseError: function (evt, data) {
         this.fire('update-profile-request-error', {
           message: evt.detail.error.message,
           response: evt.detail.request.xhr.response
         });
+        this._setStatusResponseObject('failed',
+            this.$.saveInvestorProfile.method,
+            this.$.saveInvestorProfile.route,
+            'Opslaan mislukt' + ((data.request.xhr.response && data.request.xhr.response.error[0]) ? ': '+data.request.xhr.response.error[0].message : ''));
+
+      },
+
+      _setStatusResponseObject: function(status, method, route, error) {
+            this.set('responseStatus', {
+                status: status,
+                method: method,
+                route: route,
+                error: error
+            });
       }
     });
   </script>
