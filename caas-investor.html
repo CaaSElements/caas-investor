@@ -59,6 +59,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       on-request="_handleSubscribtionRequestSent"
       on-response="_handleSubscribtionResponse"
       on-error="_handleSubscribtionResponseError"
+      loading="{{savingSubscription}}"
     ></iron-ajax>
 
     <iron-ajax
@@ -72,6 +73,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       on-request="_handleProfileUpdateRequestSent"
       on-response="_handleProfileUpdateResponse"
       on-error="_handleProfileUpdateResponseError"
+      loading="{{savingProfile}}"
     ></iron-ajax>
 
   </template>
@@ -221,6 +223,18 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
         * True while loading investor daa
         */
         loadingCampaignTypes: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        savingProfile: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        savingSubscription: {
           type: Boolean,
           value: false,
           notify: true
