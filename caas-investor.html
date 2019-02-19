@@ -268,6 +268,7 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
           value: [],
           observer: '_setInvestorContractsDetails'
         }
+
       },
 
       getData: function () {
@@ -308,7 +309,6 @@ Polymer Investor Element for Crowdfunding as a Service Solutions
       },
 
       _computeUpdatedProfileBody: function (firstName, lastName, privacy, addressChange) {
-          console.log(firstName);
         var address = addressChange.base;
         return {
           'firstName': firstName,
